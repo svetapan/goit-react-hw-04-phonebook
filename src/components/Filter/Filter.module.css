@@ -1,0 +1,14 @@
+.filterLabel {
+  display: block;
+}
+
+.filterInput {
+  display: block;
+  margin-bottom: 20px;
+  border: 1px solid #122236;
+  border-radius: 5px;
+}
+
+.filterInput:focus {
+  outline: 2px solid #1173db;
+}

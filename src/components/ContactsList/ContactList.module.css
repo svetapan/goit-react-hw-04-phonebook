@@ -1,0 +1,30 @@
+.item {
+  display: flex;
+  align-items: center;
+}
+
+.item:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.decor {
+  background-color: #122236;
+  height: 5px;
+  width: 5px;
+  margin-right: 5px;
+  border-radius: 50%;
+}
+
+.btn {
+  padding: 5px;
+  border: 1px solid #122236;
+  background-color: #1173db;
+  border-radius: 5px;
+  margin-left: 15px;
+  transition: all 300ms ease;
+}
+
+.btn:hover {
+  background-color: #1b5594;
+  cursor: pointer;
+}
