@@ -10,14 +10,14 @@ export default function App() {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const localData = localStorage.getItem('contacts');
+    const localData = window.localStorage.getItem('contacts');
     if (localData) {
       setContacts(JSON.parse(localData));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+    window.localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
   const handleSubmit = ({ name, number }) => {
