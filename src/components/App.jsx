@@ -1,37 +1,19 @@
-import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactsList from './ContactsList/ContactsList';
+import { useLocalStorage } from 'hooks/useLocalStorage';
 
 export default function App() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useLocalStorage('contacts', []);
   const [filter, setFilter] = useState('');
 
-  useEffect(() => {
-    const localData = window.localStorage.getItem('contacts');
-    if (localData) {
-      setContacts(JSON.parse(localData));
-    }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
-
-  const handleSubmit = ({ name, number }) => {
-    const isNameContain = contacts.some(contact => contact.name === name);
+  const handleSubmit = (newContact ) => {
+    const isNameContain = contacts.some(contact => contact.name === newContact.name);
     if (isNameContain) {
-      alert(`${name} is already in contacts`);
+      alert(`${newContact.name} is already in contacts`);
       return;
     }
-
-    const newContact = {
-      name,
-      number,
-      id: nanoid(5),
-    };
 
     setContacts(prevContacts => [...prevContacts, newContact]);
   };
@@ -41,7 +23,7 @@ export default function App() {
   };
 
   const getVisibleContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
+    const normalizedFilter = filter.toLowerCase().trim();
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
@@ -53,6 +35,15 @@ export default function App() {
     );
   };
 
+  const editContact = contact => {
+    setContacts((prevContacts) => prevContacts.map((item) => {
+      if (item.id === contact.id) {
+        return contact;
+      }
+      return item;
+    }))
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -62,15 +53,10 @@ export default function App() {
         <Filter value={filter} onChange={changeFilter} />
         <ContactsList
           contacts={getVisibleContacts()}
-          onDeleteContact={deleteContact}
+          onDelete={deleteContact}
+          onEdit={editContact}
         />
       </div>
     </div>
   );
 }
-
-App.propTypes = {
-  onSubmit: PropTypes.func,
-  contacts: PropTypes.array,
-  filter: PropTypes.string,
-};
